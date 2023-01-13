@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kabupaten Bogor</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+</body>
+
+</html>
+
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+<script src="Data/area.js"></script>
+<script src="Data/cagar_budaya.js"></script>
+<script src="Data/depo_minyak.js"></script>
+<script src="Data/industri.js"></script>
+<script src="Data/kantor_pln.js"></script>
+<script src="Data/kantor_pos.js"></script>
+<script src="Data/makam.js"></script>
+<script src="Data/niaga.js"></script>
+<script src="Data/rumah_sakit.js"></script>
+<script src="Data/stasiun.js"></script>
+<script src="Data/terminal_bus.js"></script>
+
+<script>
+//==============================================================================================
+    //Map initialization
+    var map = L.map('map').setView([-6.595038, 106.816635], 10  );
+
+    //osm layer
+    var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+//==============================================================================================
+    //Tile Layer and WMS
+
+    //water color
+    var watercolor = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
+        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        subdomains: 'abcd',
+        minZoom: 1,
+        maxZoom: 16,
+        ext: 'jpg'
+    });
+    
+    
+    //world Imagery
+    var WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    });
+
+    //positron no labels
+    var PositronNoLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+    }); PositronNoLabels.addTo(map)
+
+    //google street
+    googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+        maxZoom: 20,
+        subdomains:['mt0','mt1','mt2','mt3']
+    });
+    
+
+//==============================================================================================
+    //GeoJson
+    var areaData = L.geoJSON(areaJson, {
+        style: {
+            fillColor: '#cafacb ',
+            fillOpacity: 1,
+            color: '#82998e',
+            weight: 1.8
+        }
+    }).addTo(map)
+
+    var cagar_budayaData = L.geoJSON(cagar_budayaJson).addTo(map)
+    var depo_minyakData = L.geoJSON(depo_minyakJson).addTo(map)
+    var industriData = L.geoJSON(industriJson).addTo(map)
+    var kantor_plnData = L.geoJSON(kantor_plnJson).addTo(map)
+    var kantor_posData = L.geoJSON(kantor_posJson).addTo(map)
+    var makamData = L.geoJSON(makamJson).addTo(map)
+    var niagaData = L.geoJSON(niagaJson).addTo(map)
+    var rumah_sakitData = L.geoJSON(rumah_sakitJson).addTo(map)
+    var stasiunData = L.geoJSON(stasiunJson).addTo(map)
+    var terminal_busData = L.geoJSON(terminal_busJson).addTo(map)
+
+//==============================================================================================
+    //layer controller
+    var baseMaps = {
+        "Positron No Labels": PositronNoLabels,
+        "OSM": osm,
+        "Water color map": watercolor,
+        "World Imagery": WorldImagery,
+        "Google Street": googleStreets
+    };
+
+    var overlayMaps = {
+        "Cagar Bubdaya": cagar_budayaData,
+        "Depo Minyak": depo_minyakData,
+        "Industri": industriData,
+        "Kantor PLN": kantor_plnData,
+        "Kantor POS": kantor_posData,
+        "Makam": makamData,
+        "Niaga": niagaData,
+        "Rumah Sakit": rumah_sakitData,
+        "Stasiun": stasiunData,
+        "Terminal Bus": terminal_busData,
+        "Area": areaData
+    };
+
+    map.removeLayer(cagar_budayaData)
+    map.removeLayer(depo_minyakData)
+    map.removeLayer(industriData)
+    map.removeLayer(kantor_plnData)
+    map.removeLayer(kantor_posData)
+    map.removeLayer(makamData)
+    map.removeLayer(niagaData)
+    map.removeLayer(rumah_sakitData)
+    map.removeLayer(stasiunData)
+    map.removeLayer(terminal_busData)
+    L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map);
+
+</script>
