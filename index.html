@@ -20,12 +20,14 @@
 </head>
 
 <body>
-    <div id="map"></div>
+    <div id="map"></div>    
 </body>
 
 </html>
 
 <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+
+
 <script src="Data/area.js"></script>
 <script src="Data/cagar_budaya.js"></script>
 <script src="Data/depo_minyak.js"></script>
@@ -39,18 +41,24 @@
 <script src="Data/terminal_bus.js"></script>
 
 <script>
+    
 //==============================================================================================
     //Map initialization
     var map = L.map('map').setView([-6.595038, 106.816635], 10  );
 
-    //osm layer
-    var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
+    
+    //positron no labels
+    var PositronNoLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+    }); 
+    
+    PositronNoLabels.addTo(map)
 
 //==============================================================================================
-    //Tile Layer and WMS
-
+    //Tile Layer
+    
     //water color
     var watercolor = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
         attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -60,18 +68,16 @@
         ext: 'jpg'
     });
     
+    //osm layer
+    var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
     
     //world Imagery
     var WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
     });
 
-    //positron no labels
-    var PositronNoLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        subdomains: 'abcd',
-        maxZoom: 20
-    }); PositronNoLabels.addTo(map)
 
     //google street
     googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
@@ -136,6 +142,8 @@
     map.removeLayer(rumah_sakitData)
     map.removeLayer(stasiunData)
     map.removeLayer(terminal_busData)
+    
     L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map);
 
 </script>
+
